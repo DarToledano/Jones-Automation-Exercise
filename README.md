@@ -13,11 +13,16 @@ Playwright automation for [https://test.netlify.app/](https://test.netlify.app/)
 | `tests/callback-form.spec.js` | Single spec that runs the full flow in order |
 | `screenshots/` | Output folder for the required pre-submit screenshot |
 
-## Setup (when ready to run)
+## Setup
 
 ```bash
 npm install
-npx playwright install chromium
+```
+
+`npm install` installs `@playwright/test` and runs **`postinstall`**, which downloads **Chromium** for Playwright (needs internet). If browsers are missing, run:
+
+```bash
+npm run install:browsers
 ```
 
 ## Run tests
@@ -41,4 +46,4 @@ Pre-submit screenshots are written to `screenshots/` (see `screenshotName` in `d
 
 ## Thank-you verification
 
-Document here how you detect the thank-you page (URL pattern or visible text) once `waitForThankYouPage` is implemented.
+After submit, the test waits for URL `thank-you.html` and a heading matching **Thank You** (`waitForThankYouPage` in `helpers/formActions.js`).
