@@ -1,49 +1,88 @@
 # Jones Automation Exercise
 
-Playwright automation for [https://test.netlify.app/](https://test.netlify.app/): fill the callback form, capture a pre-submit screenshot, submit, and verify the thank-you page.
+Playwright automation for https://test.netlify.app/: fill the callback form, capture a pre-submit screenshot, submit, and verify the thank-you page.
 
-## Project layout
+## Project Layout
 
 | Path | Purpose |
 |------|---------|
-| `package.json` | Node project metadata, `npm test` script, Playwright dependency |
-| `playwright.config.js` | Test runner settings (base URL, Chromium, timeouts) |
-| `data/formData.js` | URLs and form values used by the test |
-| `helpers/formActions.js` | Reusable browser steps (navigation, fill, screenshot, submit) |
-| `tests/callback-form.spec.js` | Single spec that runs the full flow in order |
-| `screenshots/` | Output folder for the required pre-submit screenshot |
+| `package.json` | Node project metadata, npm scripts, and project dependencies |
+| `playwright.config.js` | Playwright test runner configuration |
+| `data/formData.js` | URLs and test data used by the automation |
+| `helpers/formActions.js` | Page Object containing reusable browser actions |
+| `utils/logger.js` | Winston logger configuration for console and file logging |
+| `tests/callback-form.spec.js` | Playwright test that executes and verifies the complete callback flow |
+| `screenshots/` | Generated pre-submit screenshots |
+| `logs/` | Generated automation log files |
 
 ## Setup
+
+Install all project dependencies:
 
 ```bash
 npm install
 ```
 
-`npm install` installs `@playwright/test` and runs **`postinstall`**, which downloads **Chromium** for Playwright (needs internet). If browsers are missing, run:
+This installs the dependencies defined in `package.json`, including Playwright and Winston.
+
+The `postinstall` script also downloads Chromium for Playwright (internet connection required).
+
+If the Playwright browser is missing, run:
 
 ```bash
 npm run install:browsers
 ```
 
-## Run tests
+## Run Tests
 
-By default, tests run in a **visible** Chromium window with **500ms slow motion** between actions (see `playwright.config.js`).
+By default, tests run in a visible Chromium window with 500ms slow motion between actions (see `playwright.config.js`).
 
 ```bash
 npm test
-npm test -- --grep "opens the landing page"
 ```
 
-Headless (no window), e.g. for CI:
+To run in headless mode, for example in CI:
 
 ```bash
 set CI=1&& npm test
 ```
 
-Optional: `npm run test:headed` (same as `npm test` locally with current config).
+Optional:
 
-Pre-submit screenshots are written to `screenshots/` (see `screenshotName` in `data/formData.js`).
+```bash
+npm run test:headed
+```
 
-## Thank-you verification
+## Logging
 
-After submit, the test waits for URL `thank-you.html` and a heading matching **Thank You** (`waitForThankYouPage` in `helpers/formActions.js`).
+The project uses Winston for structured logging.
+
+Logs are:
+- Displayed in the console during test execution.
+- Written to `logs/automation.log`.
+
+Each log entry contains a timestamp, log level, and message, for example:
+
+```text
+[2026-09-30T12:30:21.123Z] [INFO] Opening callback form
+[2026-09-30T12:30:22.417Z] [INFO] Filling callback form fields
+[2026-09-30T12:30:24.102Z] [INFO] Taking pre-submit screenshot
+[2026-09-30T12:30:26.005Z] [INFO] Thank-you page reached
+```
+
+The logger records the main automation steps without logging sensitive form data.
+
+## Screenshot
+
+A screenshot is captured before the form is submitted and written to the `screenshots/` directory.
+
+The screenshot filename is configured in `data/formData.js`.
+
+## Thank-you Verification
+
+After submission, the test verifies that:
+
+- The browser navigates to `thank-you.html`.
+- A heading matching `Thank You` is visible.
+
+These checks confirm that the callback form flow completed successfully.
