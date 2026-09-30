@@ -7,3 +7,7 @@ blob-report/
 # Generated screenshots from test runs (folder kept via .gitkeep)
 screenshots/*
 !screenshots/.gitkeep
+
+# Generated automation logs (folder kept via .gitkeep)
+logs/*
+!logs/.gitkeep
